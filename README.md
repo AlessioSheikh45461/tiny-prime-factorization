@@ -19,3 +19,10 @@ The trade-off: Pollard's rho is not the fastest known factorization method for l
 ## Edge cases
 
 `factorize(0)`, `factorize(1)`, and `factorize(-1)` all return an empty dict, because none of those values have prime factors. Negative inputs are factorized by their absolute value — a sign is not a prime factor, so it does not appear in the output. The input is passed through `int()`, so numeric strings or other integer-coercible types work, but floats that would lose precision (e.g., 1e18) are your responsibility to convert correctly beforehand.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
